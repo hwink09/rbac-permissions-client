@@ -4,6 +4,8 @@ import Login from '~/pages/Login'
 import Dashboard from '~/pages/Dashboard'
 import NotFound from '~/pages/NotFound'
 import AccessDenied from '~/pages/AccessDenied'
+import RbacRoute from '~/components/core/RbacRoute'
+import { permissions } from '~/config/rbacConfig'
 
 const ProtectedRoute = () => {
   // Check userInfo in localStorage for UI routing only
@@ -33,12 +35,29 @@ function App() {
       </Route>
 
       <Route element={<ProtectedRoute />}>
-        <Route path='/dashboard' element={<Dashboard />} />
         {/* Tất cả element đều dùng chung component Dashboard dưới dạng tabs và code hết trong Dashboard.jsx để test các chức năng khác nhau, thực tế có thể tách ra các component riêng biệt */}
-        <Route path='/support' element={<Dashboard />} />
-        <Route path='/messages' element={<Dashboard />} />
-        <Route path='/revenue' element={<Dashboard />} />
-        <Route path='/admin-tools' element={<Dashboard />} />
+        <Route element={<RbacRoute requiredPermission={permissions.VIEW_DASHBOARD} />} >
+          <Route path='/dashboard' element={<Dashboard />} />
+          {/* <Route path='/dashboard/create' element={<Dashboard />} />
+          <Route path='/dashboard/update' element={<Dashboard />} />
+          <Route path='/dashboard/delete' element={<Dashboard />} /> */}
+        </Route>
+
+        <Route element={<RbacRoute requiredPermission={permissions.VIEW_SUPPORT} />} >
+          <Route path='/support' element={<Dashboard />} />
+        </Route>
+
+        <Route element={<RbacRoute requiredPermission={permissions.VIEW_MESSAGES} />} >
+          <Route path='/messages' element={<Dashboard />} />
+        </Route>
+
+        <Route element={<RbacRoute requiredPermission={permissions.VIEW_REVENUE} />} >
+          <Route path='/revenue' element={<Dashboard />} />
+        </Route>
+
+        <Route element={<RbacRoute requiredPermission={permissions.VIEW_ADMIN_TOOLS} />} >
+          <Route path='/admin-tools' element={<Dashboard />} />
+        </Route>
       </Route>
 
       <Route path='*' element={<NotFound />} />
