@@ -21,7 +21,8 @@ function Login() {
     const res = await authorizedAxiosInstance.post(`${API_ROOT}/v1/users/login`, data)
     const userInfo = {
       id: res.data.id,
-      email: res.data.email
+      email: res.data.email,
+      role: res.data.role
     }
 
     // Store only userInfo in localStorage for UI purposes (display username, etc.)
@@ -39,11 +40,11 @@ function Login() {
       minHeight: '100vh',
       alignItems: 'center',
       justifyContent: 'flex-start',
-      background: 'url("src/assets/bg-img.jpeg")',
+      background: 'url("src/assets/bg-img.jpg")',
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.4)'
+      backgroundPosition: 'center'
+      // boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.4)'
     }}>
       <form onSubmit={handleSubmit(submitLogIn)}>
         <Zoom in={true} style={{ transitionDelay: '200ms' }}>

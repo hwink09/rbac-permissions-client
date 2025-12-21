@@ -8,13 +8,20 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
 import authorizedAxiosInstance from '~/utils/authorizedAxios'
-import { API_ROOT } from '~/utils/constants'
+import { API_ROOT, TAB_URLS } from '~/utils/constants'
 import { useNavigate } from 'react-router-dom'
 import { handleLogoutAPI } from '~/apis'
+import { Link } from 'react-router-dom'
+import YoutubeCoverHwinkdev from '~/assets/youtube-cover-hwink.jpeg'
+import Tab from '@mui/material/Tab'
+import TabContext from '@mui/lab/TabContext'
+import TabList from '@mui/lab/TabList'
+import TabPanel from '@mui/lab/TabPanel'
 
 function Dashboard() {
-  const [user, setUser] = useState(null)
   const navigate = useNavigate()
+  const [user, setUser] = useState(null)
+  const [tab, setTab] = useState('1')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +35,10 @@ function Dashboard() {
     await handleLogoutAPI()
     localStorage.removeItem('userInfo')
     navigate('/login')
+  }
+
+  const handleChange = (event, newTab) => {
+    setTab(newTab)
   }
 
 
@@ -49,18 +60,80 @@ function Dashboard() {
 
   return (
     <Box sx={{
-      maxWidth: '1120px',
-      marginTop: '1em',
+      maxWidth: '1200px',
+      // marginTop: '1em',
+      margin: '0 auto',
       display: 'flex',
       justifyContent: 'center',
       flexDirection: 'column',
-      padding: '0 1em'
+      padding: '0 1em',
+      gap: 2
     }}>
-      <Alert severity="info" sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
+
+      <Box as={Link} to="https://www.youtube.com/@hwinkdev.official" target='blank'>
+        <Box
+          component='img'
+          sx={{ width: '100%', height: '180px', borderRadius: '6px', objectFit: 'cover' }}
+          src={YoutubeCoverHwinkdev}
+          alt='hwinkdev-cover'
+        />
+      </Box>
+
+      <Alert severity="info" sx={{ '.MuiAlert-message': { overflow: 'hidden' }, width: { md: 'max-content' } }}>
         Đây là trang Dashboard sau khi user:&nbsp;
         <Typography variant="span" sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}>{user?.email}</Typography>
         &nbsp; đăng nhập thành công thì mới cho truy cập vào.
       </Alert>
+
+      <Alert severity="success" variant="outlined" sx={{ '.MuiAlert-message': { overflow: 'hidden' }, width: { md: 'max-content' } }}>
+        Role hiện tại của user đang đăng nhập là:&nbsp;
+        <Typography variant="span" sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}>{user?.role}</Typography>
+      </Alert>
+
+      {/* Khu vực phân quyền truy cập. Sử dụng MUI Tabs cho đơn giản để test các chức năng khác nhau */}
+      <TabContext value={tab}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="Hwinkdev RBAC Permissions Tabs">
+            <Tab label="Dashboard" value={TAB_URLS.DASHBOARD} />
+            <Tab label="Support" value={TAB_URLS.SUPPORT} />
+            <Tab label="Messages" value={TAB_URLS.MESSAGES} />
+            <Tab label="Revenue" value={TAB_URLS.REVENUE} />
+            <Tab label="Admin Tools" value={TAB_URLS.ADMIN_TOOLS} />
+          </TabList>
+        </Box>
+
+        <TabPanel value={TAB_URLS.DASHBOARD}>
+          <Alert severity='success' sx={{ width: 'max-content' }}>
+            Đây là nội dung của tab Dashboard, tất cả user đã đăng nhập đều có thể truy cập vào tab này.
+          </Alert>
+        </TabPanel>
+
+        <TabPanel value={TAB_URLS.SUPPORT}>
+          <Alert severity='success' sx={{ width: 'max-content' }}>
+            Đây là nội dung của tab Support!
+          </Alert>
+        </TabPanel>
+
+        <TabPanel value={TAB_URLS.MESSAGES}>
+          <Alert severity='info' sx={{ width: 'max-content' }}>
+            Đây là nội dung của tab Messages!
+          </Alert>
+        </TabPanel>
+
+        <TabPanel value={TAB_URLS.REVENUE}>
+          <Alert severity='warning' sx={{ width: 'max-content' }}>
+            Đây là nội dung của tab Revenue!
+          </Alert>
+        </TabPanel>
+
+        <TabPanel value={TAB_URLS.ADMIN_TOOLS}>
+          <Alert severity='error' sx={{ width: 'max-content' }}>
+            Đây là nội dung của tab Admin Tools!
+          </Alert>
+        </TabPanel>
+      </TabContext>
+
+      <Divider />
 
       <Button
         type='button'
@@ -72,8 +145,6 @@ function Dashboard() {
       >
         Logout
       </Button>
-
-      <Divider sx={{ my: 2 }} />
     </Box>
   )
 }
