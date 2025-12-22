@@ -3,7 +3,7 @@
 // Định nghĩa các roles của user trong hệ thống RBAC
 export const roles = {
   CLIENT: 'client',
-  MODARATOR: 'modarator',
+  MODERATOR: 'moderator',
   ADMIN: 'admin'
 }
 
@@ -26,7 +26,7 @@ export const rolePermissions = {
     permissions.VIEW_SUPPORT
   ],
 
-  [roles.MODARATOR]: [
+  [roles.MODERATOR]: [
     permissions.VIEW_DASHBOARD,
     permissions.VIEW_SUPPORT,
     permissions.VIEW_MESSAGES

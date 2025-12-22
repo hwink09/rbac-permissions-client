@@ -19,6 +19,7 @@ import authorizedAxiosInstance from '~/utils/authorizedAxios'
 import { API_ROOT, TAB_URLS } from '~/utils/constants'
 import { handleLogoutAPI } from '~/apis'
 import YoutubeCoverHwinkdev from '~/assets/youtube-cover-hwink.jpeg'
+import RbacPermissionsDiagram from '~/assets/rbac.png'
 import { usePermission } from '~/hooks/usePermission'
 import { permissions } from '~/config/rbacConfig'
 
@@ -224,6 +225,16 @@ function Dashboard() {
       >
         Logout
       </Button>
+
+      <Box
+        component="img"
+        sx={{ width: '80%' }}
+        src={RbacPermissionsDiagram}
+        alt="rbac-permissions-diagram"
+      >
+
+
+      </Box>
     </Box>
   )
 }
